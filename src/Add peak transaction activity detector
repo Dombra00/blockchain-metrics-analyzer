@@ -1,0 +1,24 @@
+import random
+import collections
+
+def analyze_transaction_count(tx_data):
+    if not tx_data:
+        return 0
+    return len(tx_data)
+
+def detect_peak_activity(tx_data):
+    if not tx_data:
+        return None, 0
+    
+    hour_distribution = collections.Counter(tx_data)
+    peak_hour, peak_count = hour_distribution.most_common(1)[0]
+    return peak_hour, peak_count
+
+if __name__ == "__main__":
+    # Simulated list of transactions with timestamps in hours (0-23)
+    sample_tx_data = [random.randint(0, 23) for _ in range(random.randint(5, 50))]
+    tx_count = analyze_transaction_count(sample_tx_data)
+    peak_hour, peak_count = detect_peak_activity(sample_tx_data)
+    
+    print(f"Total Transactions: {tx_count}")
+    print(f"Peak Transaction Hour: {peak_hour}, Count: {peak_count}")
