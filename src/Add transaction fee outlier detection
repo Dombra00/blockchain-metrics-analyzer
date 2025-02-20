@@ -1,0 +1,32 @@
+import random
+import statistics
+
+def analyze_transaction_fees(tx_fees):
+    if not tx_fees:
+        return None, None, None, []
+    total_fees = sum(tx_fees)
+    avg_fee = round(statistics.mean(tx_fees), 6)
+    median_fee = round(statistics.median(tx_fees), 6)
+    outliers = detect_outliers(tx_fees)
+    return total_fees, avg_fee, median_fee, outliers
+
+def detect_outliers(tx_fees):
+    q1 = statistics.quantiles(tx_fees, n=4)[0]
+    q3 = statistics.quantiles(tx_fees, n=4)[2]
+    iqr = q3 - q1
+    lower_bound = q1 - 1.5 * iqr
+    upper_bound = q3 + 1.5 * iqr
+    return [fee for fee in tx_fees if fee < lower_bound or fee > upper_bound]
+
+if __name__ == "__main__":
+    # Simulated transaction fees in arbitrary units
+    sample_tx_fees = [round(random.uniform(0.0001, 0.05), 6) for _ in range(random.randint(10, 100))]
+    total_fees, avg_fee, median_fee, outliers = analyze_transaction_fees(sample_tx_fees)
+    
+    if total_fees is not None:
+        print(f"Total Transaction Fees: {total_fees} units")
+        print(f"Average Transaction Fee: {avg_fee} units")
+        print(f"Median Transaction Fee: {median_fee} units")
+        print(f"Outliers: {outliers}")
+    else:
+        print("No transaction fee data available.")
